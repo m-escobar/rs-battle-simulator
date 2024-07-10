@@ -1,3 +1,5 @@
+pub mod game_ui;
+
 use std::error::Error;
 use std::io::Stdout;
 

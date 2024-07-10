@@ -1,21 +1,15 @@
 use std::error::Error;
 use std::io::{stdout, Write};
 
-use crossterm::{cursor, QueueableCommand};
-use crossterm::style::Print;
-use crossterm::terminal::{Clear, ClearType};
-use rs_battle_simulator::{restore_terminal, setup_terminal};
+use rs_battle_simulator::game_ui::print_header;
+use rs_battle_simulator::setup_terminal;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();
 
     setup_terminal(&mut stdout).expect("Error starting the Terminal");
 
-
-    stdout
-        .queue(Clear(ClearType::All))?
-        .queue(cursor::MoveTo(10, 10))?
-        .queue(Print("Hello, world!\x0d\x0a"))?;
+    print_header(&mut stdout).expect("TODO: panic message");
 
     stdout.flush()?;
 
