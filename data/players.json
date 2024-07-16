@@ -46,6 +46,19 @@
       "items": {
         "sword": 1
       }
+    },
+    {
+      "name": "King Kong",
+      "description": "The king from Skull Island",
+      "health": 10,
+      "attack": 4,
+      "defense": 4,
+      "speed": 6,
+      "power": 8,
+      "actions": [
+        "foot_hit",
+        "hand_hit"
+      ]
     }
   ]
 }
