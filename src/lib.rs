@@ -1,4 +1,6 @@
 pub mod game_ui;
+pub mod players_parser;
+pub mod game_actions;
 
 use std::error::Error;
 use std::io::Stdout;
