@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Player {
+    pub id: i32,
     pub name: String,
     pub description: String,
     pub health: i32,
@@ -14,7 +15,7 @@ pub struct Player {
     pub items: HashMap<String, i32>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum PlayerActions {
     SwordAttack,
     DrinkPotion,

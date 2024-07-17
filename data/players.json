@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "name": "Arthur King",
     "description": "The king of Camelot",
     "health": 10,
@@ -18,6 +19,7 @@
     }
   },
   {
+    "id": 2,
     "name": "Godzilla",
     "description": "The King of the monsters!",
     "health": 10,
@@ -32,6 +34,7 @@
     "items": {}
   },
   {
+    "id": 3,
     "name": "Sir Lancelot",
     "description": "A knight of Camelot",
     "health": 10,
@@ -48,6 +51,7 @@
     }
   },
   {
+    "id": 4,
     "name": "King Kong",
     "description": "The king from Skull Island",
     "health": 10,
