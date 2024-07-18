@@ -43,6 +43,7 @@ pub fn select_player(players: &[Player], stdout: &mut Stdout) -> usize {
     selected_payer
 }
 
+
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     let mut selected_opponent: usize;
 
@@ -53,21 +54,43 @@ pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
             break;
         }
     }
-    
+
     selected_opponent
 }
 
-// function game_actions.select_opponent(players_list, player_id)
-// local selected_opponent = 0
-//
-// repeat
-// local opponent = math.random(#players_list)
-//
-// if opponent ~= player_id
-// then selected_opponent = opponent
-// end
-//
-// until selected_opponent > 0
-//
-// return selected_opponent
-// end
+
+pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
+    let mut user_input = String::new();
+    let mut selected_action: usize;
+    let actions_counter = player.actions.len();
+    let mut name: String = Default::default();
+
+    loop {
+        print_header(stdout).expect("TODO: panic message");
+
+        let _ = stdout.queue(Print("\x0d\x0aYour turn! Choose what you will do:\x0d\x0a\x0d\x0a"));
+
+        player.actions.iter().clone().enumerate()
+            .for_each(|(i, p)| {
+                name = format!("{} - {:?}\x0d\x0a", i + 1, p);
+                let _ = stdout.queue(Print(name.to_string()));
+
+            });
+
+        let _ = stdout.queue(Print("\x0d\x0a"));
+
+        let _ = stdout.flush();
+
+        io::stdin().read_line(&mut user_input).expect("Error: unable to read user input.");
+
+        selected_action = user_input.trim().parse().unwrap_or(0);
+
+        if selected_action > 0 && selected_action <= actions_counter {
+            break;
+        } else {
+            user_input= "".to_string();
+        }
+    }
+
+    selected_action
+}
