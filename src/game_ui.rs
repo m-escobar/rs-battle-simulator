@@ -19,5 +19,6 @@ pub fn print_header(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
         .queue(Print("\x0d\x0a"))?
         .queue(Print("\x0d\x0a"))?
         .queue(Print("=======================================================================\x0d\x0a"))?;
+    
     Ok(())
 }
