@@ -1,23 +1,21 @@
 use std::error::Error;
-use std::io::{stdout, Write};
-use rs_battle_simulator::game_actions::select_player;
-use rs_battle_simulator::game_ui::print_header;
+use std::io::{stdout};
 use rs_battle_simulator::players_parser::load_players;
-use rs_battle_simulator::setup_terminal;
+use rs_battle_simulator::game_actions::select_player;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();
-    let players = load_players();
 
-    setup_terminal(&mut stdout).expect("Error starting the Terminal");
+    let players = match load_players() {
+        Ok(players) => players,
+        Err(_) => panic!("Error loading Players config."),
+    };
 
-    print_header(&mut stdout).expect("TODO: panic message");
-
-    select_player(&players);
+    // setup_terminal(&mut stdout).expect("Error starting the Terminal");
     
-    stdout.flush()?;
+    let _selected_player = select_player(&players, &mut stdout);
 
-
+    // stdout.flush()?;
 
 
     // out.queue(Clear(ClearType::All)).unwrap();
