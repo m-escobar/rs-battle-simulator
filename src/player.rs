@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -24,4 +25,11 @@ pub enum PlayerActions {
     TailHit,
     FootHit,
     HandHit,
+}
+
+
+impl fmt::Display for PlayerActions {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Debug::fmt(self, f)
+    }
 }

@@ -1,8 +1,9 @@
 use std::error::Error;
-use std::io::{stdout, Stdout};
-use rs_battle_simulator::players_parser::load_players;
+use std::io::stdout;
+
 use rs_battle_simulator::game_actions::{select_action, select_opponent, select_player};
 use rs_battle_simulator::player::Player;
+use rs_battle_simulator::players_parser::load_players;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();

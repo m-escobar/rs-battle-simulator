@@ -1,48 +1,13 @@
+use std::collections::HashMap;
 use std::io;
 use std::io::{Stdout, Write};
 
 use crossterm::QueueableCommand;
 use crossterm::style::Print;
 use rand::Rng;
+
 use crate::game_ui::print_header;
 use crate::player::Player;
-
-pub fn select_player(players: &[Player], stdout: &mut Stdout) -> usize {
-    let mut user_input = String::new();
-    let mut selected_payer: usize;
-    let player_counter = players.len();
-    let mut name: String = Default::default();
-
-    loop {
-        print_header(stdout).expect("TODO: panic message");
-
-        stdout.queue(Print("\x0d\x0aChoose your Player and go to the BATTLE field!\x0d\x0a\x0d\x0a")).expect("TODO: panic message");
-
-        players.iter().clone()
-            .for_each(|p| {
-                name = format!("{} - {}\x0d\x0a", p.id, p.name);
-                let _ = stdout.queue(Print(name.to_string()));
-
-            });
-
-        let _ = stdout.queue(Print("\x0d\x0a"));
-
-        let _ = stdout.flush();
-
-        io::stdin().read_line(&mut user_input).expect("Error: unable to read user input.");
-
-        selected_payer = user_input.trim().parse().unwrap_or(0);
-
-        if selected_payer > 0 && selected_payer <= player_counter {
-            break;
-        } else {
-            user_input= "".to_string();
-        }
-    }
-
-    selected_payer
-}
-
 
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     let mut selected_opponent: usize;
@@ -59,23 +24,55 @@ pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
 }
 
 
+pub fn select_player(players: &[Player],  stdout: &mut Stdout) -> usize {
+    let message: &str = "Choose your Player and go to the BATTLE field!";
+    let mut player_list: HashMap<i32, String> = HashMap::new();
+
+    players
+        .iter()
+        .for_each(|p| {
+            player_list.insert(p.id, p.name.clone());
+        });
+
+    select_option(player_list, message, stdout)
+}
+
+
 pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
+    let message: &str = "Your turn! Choose what you will do:";
+    let mut actions= HashMap::<i32, String>::new();
+
+    player.actions
+        .iter()
+        .clone()
+        .enumerate()
+        .for_each(|(i, p)| {
+            actions.insert(i as i32 + 1, p.to_string());
+        });
+
+    select_option(actions, message, stdout) - 1
+}
+
+pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut Stdout) -> usize {
+    let mut selected_option: usize;
     let mut user_input = String::new();
-    let mut selected_action: usize;
-    let actions_counter = player.actions.len();
-    let mut name: String = Default::default();
+    let counter = options.len();
+    let formated_message = String::from("\x0d\x0a") + message + "\x0d\x0a\x0d\x0a";
 
     loop {
         print_header(stdout).expect("TODO: panic message");
 
-        let _ = stdout.queue(Print("\x0d\x0aYour turn! Choose what you will do:\x0d\x0a\x0d\x0a"));
-
-        player.actions.iter().clone().enumerate()
-            .for_each(|(i, p)| {
-                name = format!("{} - {:?}\x0d\x0a", i + 1, p);
-                let _ = stdout.queue(Print(name.to_string()));
-
-            });
+        let _ = stdout.queue(Print(&formated_message));
+        
+        let mut items: Vec<_> = options.iter().collect();
+        items.sort_by(|x,y| x.0.cmp(y.0));
+        
+        items
+            .iter()
+            .for_each(|item| {
+            
+            let _ = stdout.queue(Print(item.0.to_string() + " - " + item.1 + "\x0d\x0a"));
+        });
 
         let _ = stdout.queue(Print("\x0d\x0a"));
 
@@ -83,14 +80,14 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
 
         io::stdin().read_line(&mut user_input).expect("Error: unable to read user input.");
 
-        selected_action = user_input.trim().parse().unwrap_or(0);
+        selected_option = user_input.trim().parse().unwrap_or(0);
 
-        if selected_action > 0 && selected_action <= actions_counter {
+        if selected_option > 0 && selected_option <= counter {
             break;
         } else {
-            user_input= "".to_string();
+            user_input = "".to_string();
         }
     }
 
-    selected_action
+    selected_option
 }
