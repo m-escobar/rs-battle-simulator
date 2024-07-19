@@ -47,7 +47,7 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
         .clone()
         .enumerate()
         .for_each(|(i, p)| {
-            actions.insert(i as i32 + 1, p.to_string());
+            actions.insert(i as i32 + 1, p.description());
         });
 
     select_option(actions, message, stdout) - 1
@@ -90,4 +90,9 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
     }
 
     selected_option
+}
+
+
+pub fn select_opponent_action(opponent: &Player) -> usize{
+    rand::thread_rng().gen_range(1..=opponent.actions.len())
 }
