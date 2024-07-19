@@ -53,5 +53,6 @@ pub struct Player {
     pub power: i32,
     pub actions: Vec<PlayerActions>,
     pub items: HashMap<String, i32>,
+    pub action: usize,
 }
 
