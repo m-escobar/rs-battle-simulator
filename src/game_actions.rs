@@ -6,7 +6,6 @@ use crossterm::QueueableCommand;
 use crossterm::style::Print;
 use rand::Rng;
 
-use crate::game_ui::print_header;
 use crate::player::Player;
 
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
@@ -23,7 +22,6 @@ pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     selected_opponent
 }
 
-
 pub fn select_player(players: &[Player],  stdout: &mut Stdout) -> usize {
     let message: &str = "Choose your Player and go to the BATTLE field!";
     let mut player_list: HashMap<i32, String> = HashMap::new();
@@ -36,7 +34,6 @@ pub fn select_player(players: &[Player],  stdout: &mut Stdout) -> usize {
 
     select_option(player_list, message, stdout)
 }
-
 
 pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
     let message: &str = "Your turn! Choose what you will do:";
@@ -60,7 +57,7 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
     let formated_message = String::from("\x0d\x0a") + message + "\x0d\x0a\x0d\x0a";
 
     loop {
-        print_header(stdout).expect("TODO: panic message");
+        // print_header(stdout).expect("TODO: panic message");
 
         let _ = stdout.queue(Print(&formated_message));
         
@@ -92,7 +89,13 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
     selected_option
 }
 
-
 pub fn select_opponent_action(opponent: &Player) -> usize{
     rand::thread_rng().gen_range(1..=opponent.actions.len())
+}
+
+pub fn process_actions(player: & mut Player, opponent: &mut Player) {
+    
+    
+    player.action = 0;
+    opponent.action = 0;
 }
