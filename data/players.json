@@ -3,11 +3,13 @@
     "id": 1,
     "name": "Arthur King",
     "description": "The king of Camelot",
-    "health": 10,
-    "attack": 7,
-    "defense": 6,
-    "speed": 7,
-    "power": 7,
+    "attributes": {
+      "health": 10,
+      "attack": 7,
+      "defense": 6,
+      "speed": 7,
+      "power": 7
+    },
     "actions": [
       "SwordAttack",
       "DrinkPotion",
@@ -23,11 +25,13 @@
     "id": 2,
     "name": "Godzilla",
     "description": "The King of the monsters!",
-    "health": 10,
-    "attack": 5,
-    "defense": 3,
-    "speed": 5,
-    "power": 20,
+    "attributes": {
+      "health": 10,
+      "attack": 5,
+      "defense": 3,
+      "speed": 5,
+      "power": 20
+    },
     "actions": [
       "FireAttack",
       "TailHit"
@@ -39,11 +43,13 @@
     "id": 3,
     "name": "Sir Lancelot",
     "description": "A knight of Camelot",
-    "health": 10,
-    "attack": 6,
-    "defense": 6,
-    "speed": 9,
-    "power": 6,
+    "attributes": {
+      "health": 10,
+      "attack": 6,
+      "defense": 6,
+      "speed": 9,
+      "power": 6
+    },
     "actions": [
       "SwordAttack",
       "Dodge"
@@ -57,11 +63,13 @@
     "id": 4,
     "name": "King Kong",
     "description": "The king from Skull Island",
-    "health": 10,
-    "attack": 4,
-    "defense": 4,
-    "speed": 6,
-    "power": 8,
+    "attributes": {
+      "health": 10,
+      "attack": 4,
+      "defense": 4,
+      "speed": 6,
+      "power": 8
+    },
     "actions": [
       "FootHit",
       "HandHit"

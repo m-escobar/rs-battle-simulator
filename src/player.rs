@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+use std::fmt;
+use crossterm::style::Attribute;
 // use std::fmt;
 use serde::{Deserialize, Serialize};
 
@@ -13,7 +15,16 @@ pub enum PlayerActions {
     HandHit,
 }
 
-// impl fmt::Display for PlayerActions {
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, Hash)]
+pub enum PlayersAttributes {
+    Health, 
+    Attack,
+    Defense,
+    Speed,
+    Power
+}
+
+// impl fmt::Display for PlayersAttributes {
 //     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 //         fmt::Debug::fmt(self, f)
 //     }
@@ -46,13 +57,8 @@ pub struct Player {
     pub id: i32,
     pub name: String,
     pub description: String,
-    pub health: i32,
-    pub attack: i32,
-    pub defense: i32,
-    pub speed: i32,
-    pub power: i32,
+    pub attributes: HashMap<String, i32>,
     pub actions: Vec<PlayerActions>,
     pub items: HashMap<String, i32>,
     pub action: usize,
 }
-
