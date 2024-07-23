@@ -1,7 +1,4 @@
 use std::collections::HashMap;
-use std::fmt;
-use crossterm::style::Attribute;
-// use std::fmt;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -23,12 +20,6 @@ pub enum PlayersAttributes {
     Speed,
     Power
 }
-
-// impl fmt::Display for PlayersAttributes {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         fmt::Debug::fmt(self, f)
-//     }
-// }
 
 impl PlayerActions {
     pub fn description(&self) -> String {
