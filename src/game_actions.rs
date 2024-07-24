@@ -7,6 +7,7 @@ use crossterm::style::Print;
 use rand::Rng;
 
 use crate::player::Player;
+use crate::player::PlayerActions::Dodge;
 
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     let mut selected_opponent: usize;
@@ -90,11 +91,26 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
 }
 
 pub fn select_opponent_action(opponent: &Player) -> usize{
-    rand::thread_rng().gen_range(1..=opponent.actions.len())
+    rand::thread_rng().gen_range(1..=opponent.actions.len()) - 1
 }
 
-pub fn process_actions(player: & mut Player, opponent: &mut Player) {
+pub fn process_actions(player: &mut Player, opponent: &mut Player) {
+    let mut dodge = false;
     
+    if player.actions[player.action] == Dodge {
+        *player.attributes.get_mut("Health").unwrap() -= 1;
+        dodge = true;
+    }
+
+    if opponent.actions[opponent.action] == Dodge {
+        *opponent.attributes.get_mut("Health").unwrap() -= 1;
+        dodge = true;
+    }
+        
+    if dodge == false {
+        println!("PA = {:?}", opponent.actions[opponent.action]);
+        
+    }
     
     player.action = 0;
     opponent.action = 0;
