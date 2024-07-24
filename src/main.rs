@@ -9,6 +9,8 @@ use rs_battle_simulator::players_parser::load_players;
 fn main() -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();
 
+    // setup_terminal(&mut stdout).expect("Error starting the Terminal");
+
     loop {
         play_game(&mut stdout)?;
 
@@ -18,8 +20,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     }    
 
 
-    // out.queue(Clear(ClearType::All)).unwrap();
-    // out.queue(MoveTo(0, 0)).unwrap();
     // out.flush().unwrap();
 
 
@@ -31,12 +31,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn play_game(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
     let looser: &str;
 
+    // out.queue(Clear(ClearType::All)).unwrap();
+    // out.queue(MoveTo(0, 0)).unwrap();
+
     let players = match load_players() {
         Ok(players) => players,
         Err(_) => panic!("Error loading Players config."),
     };
 
-    // setup_terminal(&mut stdout).expect("Error starting the Terminal");
     print_header(stdout).expect("TODO: panic message");
 
     let player_id = select_player(&players, stdout);
