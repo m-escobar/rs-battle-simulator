@@ -35,14 +35,17 @@ pub fn print_players_grid(player: &Player, opponent: &Player, stdout: &mut Stdou
     print_line(&player.name, &opponent.name, 0, 0, stdout)?;
     print_line(&player.description, &opponent.description, 0, 0, stdout)?;
     print_line(&space, &space, 0, 0, stdout)?;
-
+    
+    let mut sorted: Vec<_> = player.attributes.iter().collect();
+    sorted.sort_by_key(|a| a.0);
+    
     // Print attributes block
-    for attribute in player.attributes.clone() {
+    for attribute in sorted {
         let key = &attribute.0;
         let spaces = add_spaces(key.len(), 10);
 
-        let player_grid = get_progress_bar(attribute.1);
-        let opponent_grid = get_progress_bar(opponent.attributes[&attribute.0]);
+        let player_grid = get_progress_bar(*attribute.1);
+        let opponent_grid = get_progress_bar(opponent.attributes[attribute.0]);
 
         let player_line = key.to_string() + &spaces + &player_grid;
         let opponent_line = key.to_string() + &spaces + &opponent_grid;
@@ -55,7 +58,7 @@ pub fn print_players_grid(player: &Player, opponent: &Player, stdout: &mut Stdou
     }
 
     print_line(&space, &space, 0, 0, stdout)?;
-    
+
     stdout.queue(Print("=======================================================================\x0d\x0a"))?;
 
     Ok(())
