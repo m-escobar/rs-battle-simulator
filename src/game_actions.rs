@@ -61,14 +61,14 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
         // print_header(stdout).expect("TODO: panic message");
 
         let _ = stdout.queue(Print(&formated_message));
-        
+
         let mut items: Vec<_> = options.iter().collect();
         items.sort_by(|x,y| x.0.cmp(y.0));
-        
+
         items
             .iter()
             .for_each(|item| {
-            
+
             let _ = stdout.queue(Print(item.0.to_string() + " - " + item.1 + "\x0d\x0a"));
         });
 
@@ -96,7 +96,7 @@ pub fn select_opponent_action(opponent: &Player) -> usize{
 
 pub fn process_actions(player: &mut Player, opponent: &mut Player) {
     let mut dodge = false;
-    
+
     if player.actions[player.action] == Dodge {
         *player.attributes.get_mut("Health").unwrap() -= 1;
         dodge = true;
@@ -106,12 +106,31 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
         *opponent.attributes.get_mut("Health").unwrap() -= 1;
         dodge = true;
     }
-        
-    if dodge == false {
-        println!("PA = {:?}", opponent.actions[opponent.action]);
-        
+
+    if !dodge {
+        let player_power = ((player.attributes["Attack"] * player.attributes["Power"]) /
+                                (player.attributes["Defense"] * player.attributes["Speed"])) as f64 * 0.9;
+
+        let opponent_power = ((opponent.attributes["Attack"] * opponent.attributes["Power"]) /
+                                  (opponent.attributes["Defense"] * opponent.attributes["Speed"])) as f64 * 0.8;
+
+        if player_power >= opponent_power {
+            *opponent.attributes.get_mut("Health").unwrap() -= 1;
+        } else if player_power != opponent_power {
+            *player.attributes.get_mut("Health").unwrap() -= 1;
+        };
     }
-    
+
     player.action = 0;
     opponent.action = 0;
+}
+
+pub fn play_again(stdout: &mut Stdout) -> usize {
+    let message: &str = "Do you want to play again?";
+    let options: HashMap<i32, String> = HashMap::from([
+                                                (1, String::from("Yes")),
+                                                (2, String::from("No"))
+                                        ]);
+    
+    select_option(options, message, stdout)
 }
