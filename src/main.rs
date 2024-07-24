@@ -23,16 +23,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let opponent_id = select_opponent(&players, &player_id);
     let mut opponent: Player = players[opponent_id - 1].clone();
     
-    
     // loop {
         print_players_grid(&player, &opponent, &mut stdout)?;
     
-    
         player.action = select_action(&player,  &mut stdout);
         opponent.action = select_opponent_action(&opponent);
-    
+
         process_actions(&mut player, &mut opponent);
-    
+
     // }
     
     
