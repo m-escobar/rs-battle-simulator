@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum PlayerActions {
     SwordAttack,
     DrinkPotion,
@@ -14,7 +14,7 @@ pub enum PlayerActions {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, Hash)]
 pub enum PlayersAttributes {
-    Health, 
+    Health,
     Attack,
     Defense,
     Speed,
