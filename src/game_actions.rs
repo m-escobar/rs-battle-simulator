@@ -7,7 +7,7 @@ use crossterm::style::Print;
 use rand::Rng;
 
 use crate::player::Player;
-use crate::player::PlayerActions::Dodge;
+use crate::player::PlayerActions::{Dodge, DrinkPotion};
 
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     let mut selected_opponent: usize;
@@ -47,6 +47,10 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
         .for_each(|(i, p)| {
             actions.insert(i as i32 + 1, p.description());
         });
+
+    if player.items["potion"] == 0 {
+        actions.remove(&2);
+    }
 
     select_option(actions, message, stdout) - 1
 }
@@ -112,7 +116,7 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
                                 (player.attributes["Defense"] * player.attributes["Speed"])) as f64 * 0.9;
 
         let opponent_power = ((opponent.attributes["Attack"] * opponent.attributes["Power"]) /
-                                  (opponent.attributes["Defense"] * opponent.attributes["Speed"])) as f64 * 0.8;
+                                  (opponent.attributes["Defense"] * opponent.attributes["Speed"])) as f64 * 0.7;
 
         if player_power >= opponent_power {
             *opponent.attributes.get_mut("Health").unwrap() -= 1;
@@ -120,7 +124,17 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
             *player.attributes.get_mut("Health").unwrap() -= 1;
         };
     }
+    
+    if player.actions[player.action] == DrinkPotion && player.items["potion"] > 0 {
+        *player.attributes.get_mut("Health").unwrap() = 10;
+        *player.items.get_mut("potion").unwrap() -= 1;
+    }
 
+    if opponent.actions[opponent.action] == DrinkPotion && opponent.items["potion"] > 0 {
+        *opponent.attributes.get_mut("Health").unwrap() = 10;
+        *opponent.items.get_mut("potion").unwrap() -= 1;
+    }
+    
     player.action = 0;
     opponent.action = 0;
 }
