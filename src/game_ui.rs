@@ -112,8 +112,8 @@ fn get_progress_bar(value: i32) -> String {
     result
 }
 
-pub fn game_over(looser: &str, stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
-    if looser == "player" {
+pub fn game_over(loser: &str, stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
+    if loser == "player" {
         stdout.queue(Print("\x0d\x0aSorry! You loose!\x0d\x0a\x0d\x0a"))?;
     } else {
         stdout.queue(Print("\x0d\x0aAmazing! You WIN!\x0d\x0a\x0d\x0a"))?;

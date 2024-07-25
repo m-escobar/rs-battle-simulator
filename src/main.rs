@@ -29,7 +29,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn play_game(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
-    let looser: &str;
+    let loser: &str;
 
     // out.queue(Clear(ClearType::All)).unwrap();
     // out.queue(MoveTo(0, 0)).unwrap();
@@ -56,17 +56,17 @@ fn play_game(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
         process_actions(&mut player, &mut opponent);
 
         if player.attributes["Health"] <= 0 {
-            looser = "player";
+            loser = "player";
             break;
         }
 
         if opponent.attributes["Health"] <= 0 {
-            looser = "opponent";
+            loser = "opponent";
             break;
         }
     }
 
-    let _ = game_over(looser, stdout);
+    let _ = game_over(loser, stdout);
 
     Ok(())
 }
