@@ -4,6 +4,7 @@ use std::io::Stdout;
 use crossterm::{cursor, QueueableCommand};
 use crossterm::style::Print;
 use crossterm::terminal::{Clear, ClearType};
+use rusty_audio::Audio;
 use unicode_segmentation::UnicodeSegmentation;
 
 use crate::player::Player;
@@ -113,10 +114,19 @@ fn get_progress_bar(value: i32) -> String {
 }
 
 pub fn game_over(loser: &str, stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
+    let mut audio = Audio::new();
+
+    audio.add("win", "audio/win-match.wav");
+    audio.add("lost", "audio/lost-match.wav");
+
     if loser == "player" {
         stdout.queue(Print("\x0d\x0aSorry! You loose!\x0d\x0a\x0d\x0a"))?;
+        audio.play("lost");
+        audio.wait();
     } else {
         stdout.queue(Print("\x0d\x0aAmazing! You WIN!\x0d\x0a\x0d\x0a"))?;
+        audio.play("win");
+        audio.wait();
     }
 
     Ok(())

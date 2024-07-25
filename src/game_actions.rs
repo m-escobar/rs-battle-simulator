@@ -5,9 +5,10 @@ use std::io::{Stdout, Write};
 use crossterm::QueueableCommand;
 use crossterm::style::Print;
 use rand::Rng;
+use rusty_audio::Audio;
 
 use crate::player::Player;
-use crate::player::PlayerActions::{Dodge, DrinkPotion};
+use crate::player::PlayerActions::{Dodge, DrinkPotion, SwordAttack};
 
 pub fn select_opponent(players: &[Player], player_id: &usize) -> usize{
     let mut selected_opponent: usize;
@@ -39,6 +40,9 @@ pub fn select_player(players: &[Player],  stdout: &mut Stdout) -> usize {
 pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
     let message: &str = "Your turn! Choose what you will do:";
     let mut actions= HashMap::<i32, String>::new();
+    let mut audio = Audio::new();
+
+    audio.add("sword", "audio/sword.wav");
 
     player.actions
         .iter()
@@ -52,7 +56,14 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
         actions.remove(&2);
     }
 
-    select_option(actions, message, stdout) - 1
+    let option = select_option(actions, message, stdout) - 1;
+    
+    if player.actions[option] == SwordAttack {
+        audio.play("sword");
+        audio.wait();
+    }
+
+    option
 }
 
 pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut Stdout) -> usize {
@@ -62,8 +73,6 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
     let formated_message = String::from("\x0d\x0a") + message + "\x0d\x0a\x0d\x0a";
 
     loop {
-        // print_header(stdout).expect("TODO: panic message");
-
         let _ = stdout.queue(Print(&formated_message));
 
         let mut items: Vec<_> = options.iter().collect();
@@ -72,12 +81,10 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
         items
             .iter()
             .for_each(|item| {
-
-            let _ = stdout.queue(Print(item.0.to_string() + " - " + item.1 + "\x0d\x0a"));
-        });
+                let _ = stdout.queue(Print(item.0.to_string() + " - " + item.1 + "\x0d\x0a"));
+            });
 
         let _ = stdout.queue(Print("\x0d\x0a"));
-
         let _ = stdout.flush();
 
         io::stdin().read_line(&mut user_input).expect("Error: unable to read user input.");
@@ -99,6 +106,9 @@ pub fn select_opponent_action(opponent: &Player) -> usize{
 }
 
 pub fn process_actions(player: &mut Player, opponent: &mut Player) {
+    let mut audio = Audio::new();
+    audio.add("potion", "audio/drink-potion.wav");
+
     let mut dodge = false;
 
     if player.actions[player.action] == Dodge {
@@ -128,6 +138,8 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
     if player.actions[player.action] == DrinkPotion && player.items["potion"] > 0 {
         *player.attributes.get_mut("Health").unwrap() = 10;
         *player.items.get_mut("potion").unwrap() -= 1;
+        audio.play("potion");
+        audio.wait();
     }
 
     if opponent.actions[opponent.action] == DrinkPotion && opponent.items["potion"] > 0 {
