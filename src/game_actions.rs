@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::io;
-use std::io::{Stdout, Write};
+use std::io::Stdout;
 
 use crossterm::QueueableCommand;
 use crossterm::style::Print;
@@ -43,7 +43,7 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
     let mut audio = Audio::new();
     let mut counter:usize = 1;
     let mut idx = HashMap::<usize, i32>::new();
-    
+
     audio.add("sword", "audio/sword.wav");
 
     player.actions
@@ -58,14 +58,14 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
                 counter += 1;
             }
         });
-    
+
     let option = select_option(actions, message, stdout);
 
     if player.actions[option - 1] == SwordAttack {
         audio.play("sword");
         audio.wait();
     }
-    
+
     idx[&option] as usize
 }
 
@@ -88,7 +88,6 @@ pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut 
             });
 
         let _ = stdout.queue(Print("\x0d\x0a"));
-        let _ = stdout.flush();
 
         io::stdin().read_line(&mut user_input).expect("Error: unable to read user input.");
 

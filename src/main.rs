@@ -3,6 +3,7 @@ use std::io::{stdout, Stdout};
 use rusty_audio::Audio;
 
 use rs_battle_simulator::game_actions::*;
+use rs_battle_simulator::game_lib::{restore_terminal, setup_terminal};
 use rs_battle_simulator::game_ui::{game_over, print_header, print_players_grid};
 use rs_battle_simulator::player::Player;
 use rs_battle_simulator::players_parser::load_players;
@@ -13,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     audio.add("gameover", "audio/game-over.wav");
 
-    // setup_terminal(&mut stdout).expect("Error starting the Terminal");
+    setup_terminal(&mut stdout).expect("Error starting the Terminal");
 
     'mainloop: loop {
         play_game(&mut stdout)?;
@@ -26,10 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     audio.play("gameover");
     audio.wait();
 
-    // out.flush().unwrap();
-
-
-    // restore_terminal(&mut stdout).expect("Error restoring the Terminal");
+    restore_terminal(&mut stdout).expect("Error restoring the Terminal");
 
     Ok(())
 }
