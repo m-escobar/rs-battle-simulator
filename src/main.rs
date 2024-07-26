@@ -12,7 +12,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut audio = Audio::new();
 
     audio.add("gameover", "audio/game-over.wav");
-    
+
     // setup_terminal(&mut stdout).expect("Error starting the Terminal");
 
     'mainloop: loop {
@@ -35,7 +35,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn play_game(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
-    let mut loser: &str = Default::default();
+    let loser: &str;
     let mut audio = Audio::new();
 
     audio.add("startup", "audio/start-game.wav");
@@ -49,9 +49,8 @@ fn play_game(stdout: &mut Stdout) -> Result<(), Box<dyn Error>> {
     };
 
     print_header(stdout).expect("TODO: panic message");
-    
+
     audio.play("startup");
-    audio.wait();
     
     let player_id = select_player(&players, stdout);
     let mut player: Player = players[player_id - 1].clone();
