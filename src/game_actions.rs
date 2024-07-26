@@ -41,7 +41,9 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
     let message: &str = "Your turn! Choose what you will do:";
     let mut actions= HashMap::<i32, String>::new();
     let mut audio = Audio::new();
-
+    let mut counter:usize = 1;
+    let mut idx = HashMap::<usize, i32>::new();
+    
     audio.add("sword", "audio/sword.wav");
 
     player.actions
@@ -49,21 +51,22 @@ pub fn select_action(player: &Player,  stdout: &mut Stdout) -> usize {
         .clone()
         .enumerate()
         .for_each(|(i, p)| {
-            actions.insert(i as i32 + 1, p.description());
+
+            if *p != DrinkPotion || player.items["potion"] > 0 {
+                actions.insert(counter as i32, p.description());
+                idx.insert(counter, i as i32);
+                counter += 1;
+            }
         });
-
-    if player.items["potion"] == 0 {
-        actions.remove(&2);
-    }
-
-    let option = select_option(actions, message, stdout) - 1;
     
-    if player.actions[option] == SwordAttack {
+    let option = select_option(actions, message, stdout);
+
+    if player.actions[option - 1] == SwordAttack {
         audio.play("sword");
         audio.wait();
     }
-
-    option
+    
+    idx[&option] as usize
 }
 
 pub fn select_option(options: HashMap<i32, String>, message: &str, stdout: &mut Stdout) -> usize {
@@ -134,7 +137,7 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
             *player.attributes.get_mut("Health").unwrap() -= 1;
         };
     }
-    
+
     if player.actions[player.action] == DrinkPotion && player.items["potion"] > 0 {
         *player.attributes.get_mut("Health").unwrap() = 10;
         *player.items.get_mut("potion").unwrap() -= 1;
@@ -146,7 +149,7 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
         *opponent.attributes.get_mut("Health").unwrap() = 10;
         *opponent.items.get_mut("potion").unwrap() -= 1;
     }
-    
+
     player.action = 0;
     opponent.action = 0;
 }
@@ -157,6 +160,6 @@ pub fn play_again(stdout: &mut Stdout) -> usize {
                                                 (1, String::from("Yes")),
                                                 (2, String::from("No"))
                                         ]);
-    
+
     select_option(options, message, stdout)
 }
