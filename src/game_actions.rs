@@ -157,8 +157,8 @@ pub fn process_actions(player: &mut Player, opponent: &mut Player) {
 pub fn play_again(stdout: &mut Stdout) -> usize {
     let message: &str = "Do you want to play again?";
     let options: HashMap<i32, String> = HashMap::from([
-                                                (1, String::from("Yes")),
-                                                (2, String::from("No"))
+                                            (1, String::from("Yes")),
+                                            (2, String::from("No"))
                                         ]);
 
     select_option(options, message, stdout)
